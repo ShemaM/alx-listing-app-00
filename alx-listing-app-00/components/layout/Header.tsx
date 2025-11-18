@@ -28,9 +28,9 @@ const Header: React.FC = () => {
                 placeholder="Search properties..."
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
               />
-              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                🔍
-              </div>
+             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+  🔍
+</div>
             </div>
             <button className="text-gray-600 hover:text-blue-600 transition-colors">Sign in</button>
             <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
@@ -40,8 +40,8 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button className="md:hidden text-gray-600">
-            ☰
-          </button>
+  ☰
+</button>
         </div>
       </div>
     </header>

@@ -1,11 +1,15 @@
 import React from 'react';
-import { PROPERTYLISTINGSAMPLE, FILTER_CATEGORIES } from '../constants';
+import { PROPERTYLISTINGSAMPLE, FILTER_CATEGORIES, HERO_BACKGROUND } from '../constants';
+import Pill from '../components/properties/Pill';
 
 const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-blue-600 text-white py-20">
+      <section 
+        className="relative text-white py-20 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${HERO_BACKGROUND})` }}
+      >
         <div className="container mx-auto px-4 text-center">     
           <h1 className="text-4xl md:text-6xl font-bold mb-4">   
             Find your favorite place here!
@@ -24,12 +28,11 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="flex overflow-x-auto space-x-4 pb-4">  
             {FILTER_CATEGORIES.map((filter) => (
-              <button
+              <Pill
                 key={filter}
-                className="flex-shrink-0 px-6 py-2 border border-gray-300 rounded-full hover:border-gray-400 transition-colors whitespace-nowrap"
-              >
-                {filter}
-              </button>
+                filter={filter}
+                onClick={() => console.log(`Filter: ${filter}`)}
+              />
             ))}
           </div>
         </div>
@@ -56,7 +59,7 @@ const HomePage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Property Details - THIS IS THE PART YOU HAVE */}
+                {/* Property Details */}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-xl font-semibold">{property.name}</h3>
