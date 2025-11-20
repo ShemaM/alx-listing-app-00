@@ -1,8 +1,7 @@
-
-import styles from '../styles/Home.module.css';
 import React, { useState } from "react";
 import Image from "next/image";
-import { HERO_BACKGROUND, PROPERTYLISTINGSAMPLE } from "../constants";
+import styles from "../styles/Home.module.css";
+import { PROPERTYLISTINGSAMPLE } from "../constants";
 import { PropertyProps } from "../interfaces";
 
 const HomePage: React.FC = () => {
@@ -23,10 +22,8 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section
-        className={styles.hero}
-        style={{ '--hero-bg': `url(${HERO_BACKGROUND})` } as React.CSSProperties} // no inline CSS except variable
-      >
+      <section className={styles.hero}>
+        <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Find your favorite place here!
@@ -34,10 +31,9 @@ const HomePage: React.FC = () => {
           <p className="text-lg md:text-xl text-white mb-8">
             The best prices for over 2 million properties worldwide.
           </p>
-          <form
-            onSubmit={handleSearch}
-            className="flex flex-col sm:flex-row w-full gap-2"
-          >
+
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className={styles.searchForm}>
             <input
               type="text"
               value={query}
