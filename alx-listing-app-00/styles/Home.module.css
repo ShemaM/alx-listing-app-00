@@ -1,0 +1,28 @@
+.hero {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-image: var(--hero-bg); /* use CSS variable for dynamic image */
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* overlay */
+  z-index: 0;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  max-width: 640px;
+  width: 100%;
+  padding: 0 1rem;
+}

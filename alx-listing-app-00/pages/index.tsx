@@ -1,101 +1,91 @@
-import React from 'react';
-import { PROPERTYLISTINGSAMPLE, FILTER_CATEGORIES, HERO_BACKGROUND } from '../constants';
-import Pill from '../components/properties/Pill';
+
+import styles from '../styles/Home.module.css';
+import React, { useState } from "react";
+import Image from "next/image";
+import { HERO_BACKGROUND, PROPERTYLISTINGSAMPLE } from "../constants";
+import { PropertyProps } from "../interfaces";
 
 const HomePage: React.FC = () => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<PropertyProps[]>([]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const filtered = PROPERTYLISTINGSAMPLE.filter(
+      (property) =>
+        property.name.toLowerCase().includes(query.toLowerCase()) ||
+        property.address.city.toLowerCase().includes(query.toLowerCase()) ||
+        property.address.state.toLowerCase().includes(query.toLowerCase())
+    );
+    setResults(filtered);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Hero Section */}
-      <section 
-        className="relative text-white py-20 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${HERO_BACKGROUND})` }}
+      <section
+        className={styles.hero}
+        style={{ '--hero-bg': `url(${HERO_BACKGROUND})` } as React.CSSProperties} // no inline CSS except variable
       >
-        <div className="container mx-auto px-4 text-center">     
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">   
+        <div className={styles.heroContent}>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Find your favorite place here!
           </h1>
-          <p className="text-xl md:text-2xl mb-8">
+          <p className="text-lg md:text-xl text-white mb-8">
             The best prices for over 2 million properties worldwide.
           </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">      
-            Explore Properties
-          </button>
+          <form
+            onSubmit={handleSearch}
+            className="flex flex-col sm:flex-row w-full gap-2"
+          >
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for a city, property, or region..."
+              className="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+            />
+            <button
+              type="submit"
+              className="mt-2 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Search
+            </button>
+          </form>
         </div>
       </section>
 
-      {/* Filter Section */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex overflow-x-auto space-x-4 pb-4">  
-            {FILTER_CATEGORIES.map((filter) => (
-              <Pill
-                key={filter}
-                filter={filter}
-                onClick={() => console.log(`Filter: ${filter}`)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Property Listings Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8">Featured Properties</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {PROPERTYLISTINGSAMPLE.map((property) => (
-              <div key={property.name} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                {/* Property Image */}
-                <div className="relative">
-                  <img
-                    src={property.image}
-                    alt={property.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  {property.discount && (
-                    <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">   
-                      {property.discount}% OFF
-                    </div>
-                  )}
-                </div>
-
-                {/* Property Details */}
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-semibold">{property.name}</h3>
-                    <div className="flex items-center">
-                      <span className="text-yellow-500">⭐</span>
-                      <span className="ml-1">{property.rating}</span>
-                    </div>
-                  </div>
-
-                  <p className="text-gray-600 mb-4">
-                    {property.address.city}, {property.address.state}, {property.address.country}
+      {/* Search Results */}
+      <main className="px-4 py-8 max-w-7xl mx-auto">
+        {results.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {results.map((property: PropertyProps) => (
+              <div
+                key={property.name}
+                className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+              >
+                <Image
+                  src={property.image}
+                  alt={property.name}
+                  width={400}
+                  height={192}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h2 className="font-bold text-lg">{property.name}</h2>
+                  <p className="text-gray-500 text-sm">
+                    {property.address.city}, {property.address.state}
                   </p>
-
-                  <div className="flex flex-wrap gap-2 mb-4">    
-                    {property.category.slice(0, 2).map((cat: string) => (
-                      <span key={cat} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                        {cat}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-2xl font-bold">${property.price}</span>
-                      <span className="text-gray-600"> / night</span>
-                    </div>
-                    <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                      Book Now
-                    </button>
-                  </div>
+                  <p className="mt-2 font-semibold">${property.price}</p>
+                  <p className="text-yellow-400">⭐ {property.rating}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        ) : query.length > 0 ? (
+          <p className="text-center text-gray-500">No properties found.</p>
+        ) : null}
+      </main>
     </div>
   );
 };

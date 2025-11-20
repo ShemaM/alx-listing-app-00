@@ -364,16 +364,3 @@ export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
     discount: ""
   }
 ];
-
-// Filter categories for the pills
-export const FILTER_CATEGORIES = [
-  "Top Villa",
-  "Self Checkin", 
-  "Luxury Villa",
-  "Mountain View",
-  "Beachfront",
-  "City View",
-  "Pool",
-  "Free Parking",
-  "Pet Friendly"
-];
