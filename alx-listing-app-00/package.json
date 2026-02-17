@@ -22,5 +22,9 @@
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "ALX Listing App is an Airbnb clone project built with Next.js, TypeScript, and Tailwind CSS. The goal is to create a modern, responsive property listing platform where users can browse, search, and view detailed information about various properties.",
+  "main": "tailwind.config.js",
+  "author": "",
+  "license": "ISC"
 }
