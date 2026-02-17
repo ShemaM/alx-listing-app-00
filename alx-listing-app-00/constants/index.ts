@@ -1,6 +1,31 @@
-﻿import { PropertyProps } from '../interfaces';
+﻿import { PropertyProps, Property } from '../interfaces';
 // Hero background image
 export const HERO_BACKGROUND = "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80";
+
+// Sample properties using the Property interface
+export const SAMPLE_PROPERTIES: Property[] = [
+  {
+    id: "1",
+    title: "Luxury Villa with Ocean View",
+    description: "Beautiful villa with stunning ocean views and private pool",
+    price: 3200,
+    imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800"
+  },
+  {
+    id: "2",
+    title: "Modern Downtown Apartment",
+    description: "Stylish apartment in the heart of the city with all amenities",
+    price: 1800,
+    imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800"
+  },
+  {
+    id: "3",
+    title: "Cozy Mountain Cabin",
+    description: "Peaceful retreat surrounded by nature with mountain views",
+    price: 1500,
+    imageUrl: "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=800"
+  }
+];
 
 export const PROPERTYLISTINGSAMPLE: PropertyProps []  =  [
   {
