@@ -19,6 +19,41 @@ const HomePage: React.FC = () => {
     setResults(filtered);
   };
 
+  const renderSearchResults = () => {
+    if (results.length > 0) {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {results.map((property: PropertyProps) => (
+            <div
+              key={property.name}
+              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+            >
+              <Image
+                src={property.image}
+                alt={property.name}
+                width={400}
+                height={192}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h2 className="font-bold text-lg">{property.name}</h2>
+                <p className="text-gray-500 text-sm">
+                  {property.address.city}, {property.address.state}
+                </p>
+                <p className="mt-2 font-semibold">${property.price}</p>
+                <p className="text-yellow-400">⭐ {property.rating}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (query.length > 0) {
+      return <p className="text-center text-gray-500">No properties found.</p>;
+    }
+    return null;
+  };
+
   return (
     <div>
       {/* Hero Section */}
@@ -53,34 +88,7 @@ const HomePage: React.FC = () => {
 
       {/* Search Results */}
       <main className="px-4 py-8 max-w-7xl mx-auto">
-        {results.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {results.map((property: PropertyProps) => (
-              <div
-                key={property.name}
-                className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
-              >
-                <Image
-                  src={property.image}
-                  alt={property.name}
-                  width={400}
-                  height={192}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h2 className="font-bold text-lg">{property.name}</h2>
-                  <p className="text-gray-500 text-sm">
-                    {property.address.city}, {property.address.state}
-                  </p>
-                  <p className="mt-2 font-semibold">${property.price}</p>
-                  <p className="text-yellow-400">⭐ {property.rating}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : query.length > 0 ? (
-          <p className="text-center text-gray-500">No properties found.</p>
-        ) : null}
+        {renderSearchResults()}
       </main>
     </div>
   );
