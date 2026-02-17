@@ -1,6 +1,8 @@
+// pages/index.tsx
+
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import Layout from "../components/layout/Layout";
 import { PROPERTYLISTINGSAMPLE } from "../constants";
 import { PropertyProps } from "../interfaces";
 
@@ -11,7 +13,7 @@ const HomePage: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const filtered = PROPERTYLISTINGSAMPLE.filter(
-      (property) =>
+      (property: PropertyProps) =>
         property.name.toLowerCase().includes(query.toLowerCase()) ||
         property.address.city.toLowerCase().includes(query.toLowerCase()) ||
         property.address.state.toLowerCase().includes(query.toLowerCase())
@@ -19,56 +21,51 @@ const HomePage: React.FC = () => {
     setResults(filtered);
   };
 
-  const renderSearchResults = () => {
-    if (results.length > 0) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {results.map((property: PropertyProps) => (
-            <div
-              key={property.name}
-              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
-            >
-              <Image
-                src={property.image}
-                alt={property.name}
-                width={400}
-                height={192}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h2 className="font-bold text-lg">{property.name}</h2>
-                <p className="text-gray-500 text-sm">
-                  {property.address.city}, {property.address.state}
-                </p>
-                <p className="mt-2 font-semibold">${property.price}</p>
-                <p className="text-yellow-400">⭐ {property.rating}</p>
-              </div>
+  const renderListings = () => {
+    const data = results.length > 0 ? results : PROPERTYLISTINGSAMPLE;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {data.map((property: PropertyProps) => (
+          <div
+            key={property.name}
+            className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+          >
+            <Image
+              src={property.image}
+              alt={property.name}
+              width={400}
+              height={192}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <h2 className="font-bold text-lg">{property.name}</h2>
+              <p className="text-gray-500 text-sm">
+                {property.address.city}, {property.address.state}
+              </p>
+              <p className="mt-2 font-semibold">${property.price}</p>
+              <p className="text-yellow-500">⭐ {property.rating}</p>
             </div>
-          ))}
-        </div>
-      );
-    }
-    if (query.length > 0) {
-      return <p className="text-center text-gray-500">No properties found.</p>;
-    }
-    return null;
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div>
+    <Layout>
       {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.heroOverlay}></div>
-        <div className={styles.heroContent}>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+      <section className="relative h-[400px] flex flex-col items-center justify-center text-center text-white bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero.jpg')" }}>
+        <div className="bg-black bg-opacity-50 p-6 rounded">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Find your favorite place here!
           </h1>
-          <p className="text-lg md:text-xl text-white mb-8">
+          <p className="text-lg md:text-xl mb-8">
             The best prices for over 2 million properties worldwide.
           </p>
 
           {/* Search Bar */}
-          <form onSubmit={handleSearch} className={styles.searchForm}>
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 justify-center">
             <input
               type="text"
               value={query}
@@ -78,7 +75,7 @@ const HomePage: React.FC = () => {
             />
             <button
               type="submit"
-              className="mt-2 sm:mt-0 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Search
             </button>
@@ -86,11 +83,11 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Search Results */}
+      {/* Listings */}
       <main className="px-4 py-8 max-w-7xl mx-auto">
-        {renderSearchResults()}
+        {renderListings()}
       </main>
-    </div>
+    </Layout>
   );
 };
 
