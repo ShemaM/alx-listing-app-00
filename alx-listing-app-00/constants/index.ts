@@ -1,13 +1,13 @@
 ﻿// constants/index.ts
 
-import { PropertyProps, Property } from "../interfaces";
+import { PropertyProps } from "../interfaces";
 
 // Hero background image
 export const HERO_BACKGROUND =
   "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80";
 
 // Simple sample properties using the Property interface
-export const SAMPLE_PROPERTIES: Property[] = [
+export const SAMPLE_PROPERTIES = [
   {
     id: "1",
     title: "Luxury Villa with Ocean View",

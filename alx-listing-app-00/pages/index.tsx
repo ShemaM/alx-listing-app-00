@@ -1,14 +1,34 @@
-// pages/index.tsx
-
 import React, { useState } from "react";
 import Image from "next/image";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/Layout"; // Make sure this path is correct
 import { PROPERTYLISTINGSAMPLE } from "../constants";
 import { PropertyProps } from "../interfaces";
 
+// Pill component for filters
+const Pill: React.FC<{ label: string; active: boolean; onClick: () => void }> = ({ 
+  label, 
+  active, 
+  onClick 
+}) => (
+  <button
+    onClick={onClick}
+    className={`px-4 py-2 rounded-full border transition-colors ${
+      active 
+        ? "bg-blue-600 text-white border-blue-600" 
+        : "bg-white text-gray-700 border-gray-300 hover:border-blue-600"
+    }`}
+  >
+    {label}
+  </button>
+);
+
 const HomePage: React.FC = () => {
   const [query, setQuery] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [results, setResults] = useState<PropertyProps[]>([]);
+
+  // Get unique categories for filters
+  const filters = ["all", ...new Set(PROPERTYLISTINGSAMPLE.flatMap(p => p.category))];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,29 +41,56 @@ const HomePage: React.FC = () => {
     setResults(filtered);
   };
 
+  const handleFilterClick = (filter: string) => {
+    setSelectedFilter(filter);
+    if (filter === "all") {
+      setResults([]);
+    } else {
+      const filtered = PROPERTYLISTINGSAMPLE.filter(p => 
+        p.category.includes(filter)
+      );
+      setResults(filtered);
+    }
+  };
+
   const renderListings = () => {
     const data = results.length > 0 ? results : PROPERTYLISTINGSAMPLE;
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {data.map((property: PropertyProps) => (
+        {data.map((property: PropertyProps, index) => (
           <div
-            key={property.name}
+            key={index}
             className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
           >
-            <Image
-              src={property.image}
-              alt={property.name}
-              width={400}
-              height={192}
-              className="w-full h-48 object-cover"
-            />
+            <div className="relative h-48 w-full">
+              <Image
+                src={property.image}
+                alt={property.name}
+                fill
+                className="object-cover"
+              />
+              {property.discount && (
+                <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-sm">
+                  {property.discount}% OFF
+                </div>
+              )}
+            </div>
             <div className="p-4">
               <h2 className="font-bold text-lg">{property.name}</h2>
               <p className="text-gray-500 text-sm">
                 {property.address.city}, {property.address.state}
               </p>
-              <p className="mt-2 font-semibold">${property.price}</p>
-              <p className="text-yellow-500">⭐ {property.rating}</p>
+              <div className="flex flex-wrap gap-1 my-2">
+                {property.category.slice(0, 2).map((cat, i) => (
+                  <span key={i} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                    {cat}
+                  </span>
+                ))}
+              </div>
+              <div className="flex justify-between items-center mt-2">
+                <p className="font-semibold">${property.price}</p>
+                <p className="text-yellow-500">⭐ {property.rating}</p>
+              </div>
             </div>
           </div>
         ))}
@@ -54,9 +101,13 @@ const HomePage: React.FC = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative h-[400px] flex flex-col items-center justify-center text-center text-white bg-cover bg-center"
-        style={{ backgroundImage: "url('/hero.jpg')" }}>
-        <div className="bg-black bg-opacity-50 p-6 rounded">
+      <section className="relative h-[500px] flex flex-col items-center justify-center text-center text-white"
+        style={{ 
+          backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600')",
+          backgroundSize: "cover",
+          backgroundPosition: "center"
+        }}>
+        <div className="max-w-4xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Find your favorite place here!
           </h1>
@@ -83,8 +134,26 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Filter Section */}
+      <section className="py-8 px-4 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-4">Filter by Category</h2>
+        <div className="flex flex-wrap gap-3">
+          {filters.map((filter) => (
+            <Pill
+              key={filter}
+              label={filter}
+              active={selectedFilter === filter}
+              onClick={() => handleFilterClick(filter)}
+            />
+          ))}
+        </div>
+      </section>
+
       {/* Listings */}
-      <main className="px-4 py-8 max-w-7xl mx-auto">
+      <main className="px-4 pb-12 max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">
+          {selectedFilter === "all" ? "All Properties" : `${selectedFilter} Properties`}
+        </h2>
         {renderListings()}
       </main>
     </Layout>
