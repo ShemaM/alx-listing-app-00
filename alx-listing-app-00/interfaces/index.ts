@@ -20,3 +20,11 @@ export interface PropertyProps {
   image: string;
   discount: string;
 }
+
+export interface Property {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+}
